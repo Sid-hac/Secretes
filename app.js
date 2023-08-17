@@ -37,7 +37,7 @@ app.use(passport.session());
 
 
 
-mongoose.connect("mongodb://localhost:27017/userDB" , {useNewUrlParser : true , useUnifiedTopology: true});
+mongoose.connect("mongodb://127.0.0.1:27017/userDB" , {useNewUrlParser : true , useUnifiedTopology: true});
 
 const userSchema = new mongoose.Schema({
     email :String,
@@ -81,9 +81,14 @@ passport.use(new GoogleStrategy({
 ));
 
 
-app.get("/" , function(req , res){
-
-    res.render("home");
+app.get("/" , async(req , res) => {
+ 
+    try {
+        res.render("home");
+    } catch (error) {
+        console.log(error);
+    }
+    
 });
 
 app.get('/auth/google',
@@ -91,14 +96,24 @@ app.get('/auth/google',
 
   app.get("/auth/google/secrets", 
   passport.authenticate('google', { failureRedirect: "/register" }),
-  function(req, res) {
+  async(req, res) => {
     // Successful authentication, redirect secrets.
-    res.redirect("/secrets");
+    try {
+        res.redirect("/secrets");
+    } catch (error) {
+        console.log(error);
+    }
+    
   });
 
-app.get("/login" , function(req , res){
-
-    res.render("login");
+app.get("/login" , async(req , res) => {
+ 
+    try {
+        res.render("login");
+    } catch (error) {
+        console.log(error);
+    }
+    
 });
 
 
@@ -213,9 +228,10 @@ app.post("/login" , async (req , res) => {
 
 });
 
-app.post("/submit" , function(req , res){
+app.post("/submit" , async(req , res) => {
 
-    const submittedSecret = req.body.secret;
+    try {
+        const submittedSecret = req.body.secret;
     console.log(req.user.id);
     
     Users.findById(req.user.id)
@@ -230,14 +246,14 @@ app.post("/submit" , function(req , res){
         console.log(err);
         res.redirect("/secrets"); // Handle errors appropriately
     });
+        
+    } catch (error) {
+        
+        console.log(error);
+    }
 
-   
-    
+
 });
-
-
-
-
 
 
 app.listen( port, function(){
