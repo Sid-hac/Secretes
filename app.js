@@ -102,42 +102,66 @@ app.get("/login" , function(req , res){
 });
 
 
-app.get("/register" , function(req , res){
+app.get("/register" , async(req , res) => {
 
-    res.render("register");
+    try {
+        res.render("register");
+    } catch (error) {
+        console.log(error);
+    }
+    
 });
 
-app.get("/secrets" , function(req , res){
+app.get("/secrets" , async(req , res) => {
 
-    Users.find({"secret" : {$ne : null}})
-    .then(foundUser => {
- 
-        console.log(foundUser);
-       res.render("secrets" , {foundUserSecret : foundUser})
-    })
-    .catch(err => {
- 
-     console.log(err);
-    });
+    try {
+        Users.find({"secret" : {$ne : null}})
+        .then(foundUser => {
+     
+            console.log(foundUser);
+           res.render("secrets" , {foundUserSecret : foundUser})
+        })
+        .catch(err => {
+     
+         console.log(err);
+        });
+        
+    } catch (error) {
+        console.log(error);
+    }
+  
 });
 
-app.get("/submit" , function(req , res){
+app.get("/submit" , async(req , res) =>{
+   try {
 
+    if(req.isAuthenticated()){
+        res.render("submit");
+    }else{
+    
+        res.redirect("/login");
+    }
+    
+   } catch (error) {
+      
+    console.log(error);
+   }
 
-   if(req.isAuthenticated()){
-    res.render("submit");
-}else{
-
-    res.redirect("/login");
-}
+  
 });
 
-app.get("/logout" , function(req , res){
+app.get("/logout" , async(req , res) => {
 
-    req.logOut(function(){
+    try {
+        req.logOut(function(){
 
-        res.redirect("/");
-    });
+            res.redirect("/");
+        });
+        
+    } catch (error) {
+        console.log(error);
+    }
+   
 });
 
 
