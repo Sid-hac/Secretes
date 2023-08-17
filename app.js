@@ -132,8 +132,6 @@ app.get("/secrets" , async(req , res) => {
     try {
         Users.find({"secret" : {$ne : null}})
         .then(foundUser => {
-     
-            console.log(foundUser);
            res.render("secrets" , {foundUserSecret : foundUser})
         })
         .catch(err => {
