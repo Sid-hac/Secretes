@@ -23,7 +23,7 @@ app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.use(session({
 
@@ -37,7 +37,7 @@ app.use(passport.session());
 
 
 
-mongoose.connect("mongodb://localhost:27017/userDB" , {useNewUrlParser : true , useUnifiedTopology: true});
+mongoose.connect("mongodb://0.0.0.0:27017/userDB" , {useNewUrlParser : true , useUnifiedTopology: true});
 
 const userSchema = new mongoose.Schema({
     email :String,
@@ -95,7 +95,7 @@ app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
   app.get("/auth/google/secrets", 
-  passport.authenticate('google', { failureRedirect: "/register" }),
+  passport.authenticate('google', { failureRedirect: "/login" }),
   async(req, res) => {
     // Successful authentication, redirect secrets.
     try {
